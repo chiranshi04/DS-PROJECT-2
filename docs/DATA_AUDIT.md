@@ -1,0 +1,291 @@
+# Phase 2 data audit
+
+Audit date: 2026-10-30
+
+Independent authoritative-source research plus live access probes; no audio was downloaded by the research agents.
+
+This report distinguishes publisher-reported figures from values independently recomputed from downloaded files. No audio was downloaded by the research agents, and no file-level speaker or utterance overlap count is claimed.
+
+## Overall conclusion
+
+Retain Hindi, Tamil, and Bengali as the three Phase 2 languages based only on the evidence: all three are explicitly represented in FLEURS, IndicSynth, Kathbath/IndicSUPERB, ICF, Common Voice, and IndicVoices, providing the clearest documented common intersection across the principal Indian-language resources. This supports coverage and comparability, not claims that these languages are more representative, better licensed, more accessible, or free of overlap than other candidates. Record the access and licensing restrictions per dataset and do not infer balanced counts or independence without file-level audits.
+
+### Cross-dataset findings
+
+- Counts are not uniformly independently verified. IndicSynth reports approximately 4,000 hours and 989 target speakers (456 female, 533 male); Kathbath reports 1,684 hours, approximately 0.9 million unique utterances, and 1,218 speakers; SEA-Spoof's current gated package reports 553,746 examples and about 81.5 GB, while its paper reports slightly different totals; IndicVoices reports 23.7K hours and 51K speakers. These are publisher- or metadata-reported figures, not a single reconciled count, and exact per-language, per-speaker, per-file, or independently recomputed totals generally cannot be concluded.
+- The records support that IndicSynth, Kathbath/IndicSUPERB, FLEURS, Common Voice, and IndicVoices are publicly documented as covering Hindi, Tamil, and Bengali. ICF is also documented for all three, but no public bulk ICF corpus was located. SEA-Spoof includes Hindi and Tamil, while Bengali is not among its paper or current-package language listings. Access varies from public/no gate (IndicSynth and FLEURS), to email-based distribution (Common Voice), to information-sharing or manual gates (Kathbath, IndicVoices, SEA-Spoof), with ICF bulk-audio access unconfirmed.
+- Licenses cannot be treated as interchangeable. IndicSynth is CC BY-NC 4.0; FLEURS and IndicVoices are stated as CC BY 4.0; Common Voice is stated as CC0 unless otherwise specified; Kathbath has a conflict between the official CC0 packaging statement and the Hugging Face CC BY 4.0 label; ICF's dataset/audio license is unspecified; and SEA-Spoof uses a custom academic-research-only, non-commercial, no-redistribution license. Upstream raw-text, source-audio, privacy, publicity, moral-rights, model-output, and downstream-rights issues remain relevant where noted.
+- The records establish expected content-level overlap between ICF and IndicSUPERB/Kathbath because ICF directly reuses IndicSUPERB utterances. IndicSynth cites IndicSUPERB and shares its 12-language inventory, but no explicit reuse of Kathbath audio, transcripts, speakers, or metadata is documented. File-level duplication, speaker overlap, waveform duplication, and exact overlap among other datasets cannot be concluded without manifests or audio inspection.
+- FLEURS is genuine human read speech according to its paper and documentation, but it is parallel Wikipedia-derived scripted content rather than spontaneous speech. Common Voice's checked release is primarily scripted human speech, while IndicVoices is documented as including read, extempore, and conversational human recordings. These provenance claims were generally not confirmed by direct audition in the audit.
+
+### Overlap limits
+
+- No complete manifests, checksums, speaker rosters, or downloaded audio were available for several datasets, so exact overlap counts cannot be computed.
+- ICF's one-to-one construction from IndicSUPERB makes real-side utterance/content overlap with Kathbath expected; its overlap with IndicSynth is not established.
+- IndicSynth's citation of IndicSUPERB and shared languages do not prove reuse of IndicSUPERB/Kathbath recordings, transcripts, speakers, or metadata.
+- Shared languages, transcripts, source corpora, or parallel text do not by themselves establish duplicate audio or speaker identity overlap.
+- SEA-Spoof source-corpus overlap and current-package contents could not be independently inspected because access is manually gated.
+
+## Dataset findings
+
+### IndicSynth: A Large-Scale Multilingual Synthetic Speech Dataset for Low-Resource Indian Languages
+
+Official IndicSynth materials identify it as a multilingual synthetic-speech dataset for audio deepfake detection and anti-spoofing. The official GitHub repository points to the public Hugging Face dataset; the ACL 2025 paper is the authoritative publication.
+
+**Access:** Public and currently not gated according to the live Hugging Face API (private=false, gated=false, disabled=false). Metadata is directly exposed through the Hub card/API and the dataset has audio-bearing Parquet files and language-specific train configurations. I did not independently download and listen to clips in this audit; audio availability is verified from the Hub audio feature/schema and repository access instructions.
+
+**Languages:** Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Sanskrit, Tamil, Telugu, Urdu
+
+**License:** CC BY-NC 4.0 (Attribution-NonCommercial 4.0 International); attribution required and commercial use prohibited. The upstream IndicSUPERB bona fide source dataset is documented separately as CC0, but IndicSynth itself is released under CC BY-NC 4.0.
+
+**Verified findings:**
+
+- The official repository is https://github.com/vdivyas/IndicSynth and explicitly links the Hugging Face dataset https://huggingface.co/datasets/vdivyasharma/IndicSynth.
+- The ACL Anthology paper reports approximately 4,000 hours of synthetic speech from 989 target speakers: 456 female and 533 male, across 12 low-resource Indian languages.
+- The 12 languages are Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Sanskrit, Tamil, Telugu, and Urdu. The Hugging Face card/API expose these as 12 language configurations, each with a train split.
+- Generation systems documented by the official README are xtts_v2 (TTS, transcripts, fine-tuned for 10 languages), vits (TTS, transcripts, not fine-tuned), and freevc24 (voice conversion, no transcript, not fine-tuned). The paper states the systems are publicly available TTS/VC models and notes that their training datasets are not fully disclosed.
+- Hugging Face metadata exposes an audio feature plus Generative Model, Source Speaker_ID, Target Speaker ID, Gender, Source Reference Audio, Target Reference Audio, and TTS Transcript fields. The Hub dataset is stored as Parquet and provides language-specific train configurations.
+- The dataset card says it contains mimicry and diversity subsets. Bona fide source/target speech referenced in the metadata is drawn from IndicSUPERB; the official IndicSUPERB repository documents audio, speaker/gender information in filenames, transcripts, and 12-language coverage.
+- The Hugging Face API currently reports the repository as private=false, gated=false, and disabled=false, so the dataset is presently publicly accessible without a Hub access gate. The page provides code using datasets.load_dataset('vdivyasharma/IndicSynth', name=<language>, split='train').
+- The repository, Hugging Face card, and GitHub LICENSE identify the dataset license as Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0), intended by the authors for non-commercial academic research. The upstream IndicSUPERB repository separately states that its dataset packaging is CC0.
+- The dataset card warns that TTS transcripts are intended prompts and are not guaranteed to be perfectly aligned with generated audio; human/native-speaker evaluation is recommended for speech-to-text use.
+
+**Uncertainties and items requiring local verification:**
+
+- The inspected official materials provide aggregate speaker/gender counts (989 total; 456 female; 533 male), but not a verified per-language speaker/gender table; no per-language counts are asserted here.
+- The 4,000/4,000+ hour figure is an author-reported approximate scale, not an independently recomputed duration from all audio files.
+- The metadata schema exposes source/target reference-audio filenames and an audio feature, but the audit did not independently inspect every referenced clip or verify transcript-audio alignment.
+- The paper says the training datasets of the employed TTS/VC models are not fully disclosed, so generator provenance is incomplete beyond the named models.
+- The CC BY-NC designation is the dataset authors' license; users should separately review rights and restrictions attached to upstream source audio and any model-generated material before redistribution or commercial use.
+
+**Sources:** [1] [2] [3] [4] [5] [6] [7] [8]
+
+### IndicSUPERB / Kathbath
+
+Kathbath is the human-labeled, read-speech ASR corpus underlying the IndicSUPERB benchmark. The authoritative paper reports 1,684 hours across 12 Indian languages, about 0.9 million unique utterances, 1,218 speakers/contributors from 203 districts across 22 Indian states, and six benchmark tasks. It is distinct from IndicSynth: Kathbath is human-recorded/read speech, whereas IndicSynth is a later synthetic-speech corpus; the IndicSynth sources document a citation to IndicSUPERB but no explicit data dependency or reuse relationship.
+
+**Access:** Official repository is publicly accessible and lists direct downloads; Hugging Face dataset page is visible but file/content access is gated behind accepting conditions and sharing Hugging Face information. No login was available for this audit, so archive contents, manifests, and audio were not independently inspected.
+
+**Languages:** Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Sanskrit, Tamil, Telugu, Urdu
+
+**License:** Official AI4Bharat README/dataset card says the underlying IndicSUPERB packaging is CC0/no rights reserved, while the Hugging Face dataset metadata labels Kathbath cc-by-4.0. The README also says raw text is from IndicCorp/public web sources and is not owned by AI4Bharat; users should resolve this source/licensing discrepancy and underlying-text rights before reuse.
+
+**Verified findings:**
+
+- Official source is the AI4Bharat IndicSUPERB repository, whose README identifies Kathbath as 1,684 hours of labeled speech across 12 languages and provides direct object-storage download links for clean train/validation/test-known/test-unknown audio, noisy test splits, and transcripts.
+- The peer-reviewed AAAI paper and its full arXiv HTML report 1,684 hours of read speech, approximately 0.9 million utterances, 1,218 speakers spanning 203 districts and 22 Indian states. The paper states every utterance is unique: each sentence is spoken by one speaker only and is never repeated.
+- Collection methodology: the authors chose read speech; approximately 100,000 IndicCorp sentences per language were selected, restricted to alphanumeric text and 8–15 words, then read by participants. Participants consented to public research release and AI-model use through the Karya collection workflow.
+- Language selection was intended to represent North, South, East and West India. The 12 languages are Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Sanskrit, Tamil, Telugu, and Urdu.
+- The paper provides per-language clean/noisy hours, male/female speaker counts, and vocabulary sizes. It also specifies split sampling: test-unknown uses 10 male and 10 female speakers where available and about 3 hours per language, with those speakers excluded from training/validation; test-known uses about 5 hours per language from speakers also present in training; validation follows the test-known procedure; remaining data is training.
+- The AI4Bharat repository documents audio as m4a, language-separated folders, and filenames carrying speaker and gender information. The repository also provides ASV metadata separately.
+- IndicSynth’s official repository and ACL 2025 paper describe a separate 4,000+ hour synthetic dataset for the same 12 languages, with 989 target speakers and mimicry/diversity subsets. Its README cites the IndicSUPERB paper, but neither the repository nor the ACL landing page states that IndicSynth reuses Kathbath audio, transcripts, speakers, or metadata.
+- Current access: the Hugging Face ai4bharat/Kathbath repository is publicly visible but requires accepting conditions and sharing Hugging Face information to access files/content. The official AI4Bharat repository lists direct object-storage links, but this audit did not download or inspect the audio/archive contents.
+
+**Uncertainties and items requiring local verification:**
+
+- Exact utterance counts by language, by split, and by speaker were not found in the authoritative landing pages/paper text; only the paper’s approximate overall total of 0.9M unique utterances is verified.
+- The official repository’s language table appears to conflict with the paper HTML for Kannada clean duration (repository: 65.8 hours; paper Table 2: 165.8 hours). This should be reconciled against the downloadable manifests before using per-language duration totals.
+- The Hugging Face cc-by-4.0 label conflicts with the official repository’s CC0 packaging statement; the rights status of IndicCorp-derived raw text is separately caveated by the authors.
+- Because Hugging Face file access is gated and the direct archives were not downloaded, this audit cannot verify current archive integrity, actual file counts, sample rates, or whether all listed links still work.
+- No authoritative source inspected documents an explicit Kathbath-to-IndicSynth data, speaker, transcript, or metadata reuse relationship; the verified connection is only that IndicSynth cites the IndicSUPERB paper and covers the same 12 languages.
+
+**Sources:** [8] [9] [10] [11] [12] [1] [4] [6]
+
+### Indic-CodecFake (ICF)
+
+Officially documented as a benchmark of real IndicSUPERB speech and neural-audio-codec (NAC) resynthesized speech. The authors’ paper and project page verify the construction and language inventory, but I could not identify a public bulk ICF audio/metadata download or a dataset-specific audio license; the public repository primarily provides code and documentation.
+
+**Access:** Official paper, project page, code repository, and codec-generation repository are publicly accessible. I found no direct public bulk ICF audio archive, Hugging Face ICF dataset card, authenticated request form, or explicit metadata download on those official pages. The source IndicSUPERB audio is publicly downloadable from its repository’s object-store links; this establishes source-data access, not confirmed access to the generated ICF corpus.
+
+**Languages:** Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Sanskrit, Tamil, Telugu, Urdu
+
+**License:** ICF dataset/audio license: not explicitly specified or independently verifiable from the official ICF paper, project page, or repository. The official IndicFake repository declares MIT for its code/repository. The underlying IndicSUPERB repository states that its dataset packaging is CC0, while raw text is sourced from IndicCorp and is not owned by AI4Bharat; this should not be assumed to grant an unrestricted license to redistributed ICF derivatives or codec outputs.
+
+**Verified findings:**
+
+- The authoritative paper is Girish et al., ACL 2026 Findings, and the authors’ project page is https://helixometry.github.io/IndicFake/; the official code repository is https://github.com/Helixometry/IndicFake.
+- Real content is drawn directly from the official IndicSUPERB train/valid/test splits. The paper states that each source utterance is encoded and decoded through an NAC, producing a parallel one-to-one CodecFake counterpart while retaining the original split assignment.
+- The synthetic content is codec-resynthesized speech, not ordinary TTS or voice-conversion output. The paper identifies eight NAC families: DAC, Encodec, SoundStream, SpeechTokenizer, FunCodec, AudioDec, SNAC, and MIMI; the project page documents Seen and Unseen codec evaluation settings.
+- The verified language inventory is 12 languages: Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Sanskrit, Tamil, Telugu, and Urdu. The paper classifies Kannada, Malayalam, Tamil, and Telugu as Dravidian and the others as Indo-European.
+- The official IndicSUPERB repository states that its Kathbath component covers the same 12 languages, provides public train/validation/test audio links, and describes the dataset packaging as CC0 while noting that it does not own the underlying raw text.
+- Overlap risk is material: ICF reuses IndicSUPERB/Kathbath utterances and IndicSUPERB is also cited as the base real-speech corpus for IndicSynth. Any audit using IndicSUPERB, Kathbath, or IndicSynth should treat real-side utterance and speaker/content overlap as expected unless file-level manifests are compared.
+- The public Helixometry repository is reachable and declares an MIT repository license, but its README gives training/evaluation paths rather than a direct ICF bulk-audio or metadata download. The project page links the code repository, IndicSUPERB, and neural-codec resources but exposes no obvious dataset archive URL.
+- I did not inspect ICF audio or metadata because no public bulk ICF download was exposed by the official project/repository pages; therefore counts, file-level duplication, speaker overlap, and audio quality were not independently verified.
+
+**Uncertainties and items requiring local verification:**
+
+- No dataset-specific ICF license covering audio, metadata, redistribution, or commercial use was stated in the authoritative sources reviewed.
+- No public ICF file manifest, protocol, checksum, or metadata package was found, so exact counts and file-level overlap cannot be reported.
+- The official README contains generic/example training paths and does not demonstrate that the referenced ICF audio directory is populated or publicly downloadable.
+- Because ICF audio could not be retrieved, real-versus-synthetic labels, codec-specific file counts, speaker identity overlap, and waveform-level duplication were not independently inspected.
+- The underlying IndicSUPERB license statement concerns its packaging and source materials; downstream ICF licensing may require additional permissions for the original recordings and should be confirmed with the authors/source custodians.
+
+**Sources:** [13] [14] [15] [16] [17] [18] [19]
+
+### SEA-Spoof: Bridging The Gap in Multilingual Audio Deepfake Detection for South-East Asian
+
+Authoritative paper and the authors' Hugging Face repository identify SEA-Spoof as a paired bona-fide/ spoofed-speech dataset for audio deepfake detection. The paper describes six target languages and 300+ hours of paired speech; the current gated HF package reports 553,746 utterances, 81.5 GB, embedded 16-kHz FLAC audio, and additionally lists English in its live metadata.
+
+**Access:** Manual-gated on Hugging Face. Current API says gated='manual'; applicants must provide identity, affiliation, intended research use, non-commercial confirmation, and accept no-redistribution and other terms. Authors list wu_jinyang@a-star.edu.sg and imcc.sg@gmail.com for access requests. Without approval, repository files can be listed but dataset contents/audio cannot be downloaded or inspected.
+
+**Languages:** English (current HF package metadata), Hindi, Indonesian, Malay, Tamil, Thai, Vietnamese
+
+**License:** Custom 'SEA-Spoof Academic Research Use License' (repository LICENSE; HF metadata labels it 'other'). Non-commercial academic research only, limited to academic institutions/approved researchers; author approval required. Commercial use, redistribution/mirroring, voice cloning/speaker impersonation, biometric deployment, surveillance, harmful generation/misuse, and speaker identification are prohibited. Aggregate results may be published if the paper is cited and audio/metadata are not redistributed.
+
+**Verified findings:**
+
+- The authors' paper is arXiv:2509.19865 (v2, revised 2025-09-25); its dataset-release link points to https://huggingface.co/datasets/Jack-ppkdczgx/SEA-Spoof.
+- The paper's intended language coverage is Tamil, Hindi, Thai, Indonesian, Malay, and Vietnamese, with bona-fide recordings paired to spoof counterparts using real transcripts as prompts.
+- The paper reports both real/bona-fide and spoof data: its table gives 354.8 training hours of bona-fide versus 356.3 spoof hours, 44.35 versus 44.54 validation hours, and 44.35 versus 44.54 test hours; total hours are 711.1/88.89/88.89 for train/validation/test and reported utterances are 439,718/57,245/57,302.
+- Spoof speech is reported as generated by 10 open-source systems (VITS-MMS, Edge-TTS, XTTS-v2/Coqui, FastSpeech2, Indic-TTS, F5-TTS, Tacotron2, MelGAN-FastSpeech2, FastPitch, Glow-TTS) and four commercial systems (HeyGen, ElevenLabs, MiniMax, ChatGPT-4o-mini-TTS), spanning TTS and voice-cloning/VC approaches.
+- The paper says spoof waveforms were resampled to 16 kHz and stored as FLAC, and describes paired real/fake comparisons; the live HF card likewise says each record has embedded FLAC bytes and sampling_rate=16000.
+- The current HF API reports a manual-gated, non-private repository with 553,746 total examples: train 439,362, validation 57,158, evaluation 57,226; download/dataset size is 81,538,998,805 bytes (about 81.5 GB). The card reports 294,964 spoof and 258,782 bona-fide rows.
+- The current HF package's language table reports English 130,776, Hindi 71,171, Indonesian 93,542, Malay 42,382, Tamil 49,640, Thai 85,215, and Vietnamese 81,020 utterances. This is current repository metadata, not an independently sampled count.
+- The current HF card exposes source_model and source_dataset fields, plus label, spoof_type, category, language, transcript and provenance fields; the repository file listing shows Parquet shards under train, validation, and evaluation plus metadata files.
+- The live repository is explicitly marked 'Gated dataset': files can be listed but content cannot be accessed without author approval. I could not inspect audio waveforms or independently validate labels/counts by downloading samples.
+- The paper says bona-fide sources include Common Voice for all six paper languages, Indic Speech Corpora for Hindi/Tamil, GigaSpeech2 for Indonesian, Malay Conversational Speech Corpus and a Malaysian YouTube set for Malay, Thai Dialect Corpus for Thai, and VIVOS for Vietnamese; these are author-reported source claims.
+- The HF repository's current live metadata includes English even though the paper defines SEA-Spoof around six SEA languages. The paper's reported utterance totals also differ slightly from the current package totals; these version/package differences are unresolved.
+
+**Uncertainties and items requiring local verification:**
+
+- The paper specifies six languages, whereas the current HF package metadata includes 130,776 English utterances in addition to those six; the reason for this discrepancy is not documented in the inspected authoritative pages.
+- The paper's table reports 554,265 total utterances across its splits (439,718 + 57,245 + 57,302), while the current HF package reports 553,746; version/cleaning differences are not explained.
+- The paper provides aggregate hours and generator names but not a complete per-generator/per-language utterance count in the inspected text; do not infer such counts.
+- Because access is gated, I could not independently inspect audio, manifests, Parquet rows, speaker identities, real/spoof balance at the file level, or verify whether every claimed generator/source is represented in the current package.
+- The paper and card describe source corpora, but I did not independently audit the upstream licenses or confirm that rights for every source audio and commercial-generation output permit redistribution under this custom license.
+
+**Sources:** [20] [21] [22] [23] [24] [25]
+
+### Mozilla Common Voice
+
+Verified current Mozilla Common Voice is a Mozilla Foundation project whose current dataset distribution is through Mozilla Data Collective (MDC). It is suitable as an independent human-speech source in the sense that recordings are volunteered by people, but the principal current release checked here is Scripted Speech: speakers read curated sentences, so it should not be treated as spontaneous/conversational speech. Exact per-language audio and metadata were not downloaded or auditioned in this audit.
+
+**Access:** Current public distribution is through Mozilla Data Collective, not the former direct download flow. The FAQ explicitly says an email address is required to download; the cv-dataset documentation also exposes browser, API, and Python SDK routes. The inspected MDC catalog is publicly viewable, but the dynamic individual dataset cards did not expose a completed download control or authentication behavior to the text extractor, so account/login requirements beyond the documented email requirement were not independently confirmed.
+
+**Languages:** Assamese (as), Bengali (bn), Hindi (hi), Malayalam (ml), Marathi (mr), Odia (or), Punjabi (pa-IN), Sindhi (sd), Sindhi Bhil (sbn), Tamil (ta), Telugu (te), Urdu (ur), Nepali (ne-NP)
+
+**License:** CC0-1.0 / Creative Commons CC0 public-domain dedication for the dataset and contributions, unless a particular dataset card specifies otherwise. The cv-dataset GitHub repository itself is MPL-2.0, which applies to repository code/documentation rather than the audio corpus.
+
+**Verified findings:**
+
+- The official Common Voice FAQ describes the resource as a publicly available voice dataset powered by volunteer contributors and documents the pipeline: sentence collection, voice contribution, validation by other people, and periodic dataset release.
+- The current official dataset catalog identifies Common Voice Scripted Speech 27.0 as an MP3 ASR release and lists Indian-language entries including Assamese (as), Bengali (bn), Hindi (hi), Malayalam (ml), Marathi (mr), Odia (or), Punjabi (pa-IN), Sindhi (sd), Tamil (ta), Telugu (te), Urdu (ur), and Nepali (ne-NP). The catalog also lists Sindhi Bhil (sbn). Gujarati, Kannada, Sanskrit, Kashmiri, Maithili, Bhojpuri, and Manipuri were not found in the inspected current catalog text; this is not proof that no older or separate dataset exists.
+- The catalog labels the checked language datasets CC0-1.0, ASR, and MP3; for example, current v27 cards are listed for Hindi and Tamil. The Common Voice legal terms likewise state that Mozilla makes contributions and datasets available under the Creative Commons CC0 public-domain dedication unless otherwise specified.
+- The legal terms require contributors to assure that contributions are their own creation and, for Spontaneous Speech, prohibit inclusion of sensitive or personal data. This supports provenance as contributed human recordings, but does not by itself guarantee that every clip is unique to one speaker or free of all recording artifacts.
+- The official FAQ says dataset downloads are selected by version and language through MDC and require an email address. The official cv-dataset repository documents browser, API, and Python-SDK access through MDC and says releases include associated metadata such as demographic and validation information.
+- The official cv-dataset repository distinguishes active Scripted Speech and Spontaneous Speech releases; its current metadata page identifies Scripted Speech v27.0 and Spontaneous Speech v5.0. Therefore, 'Common Voice' is not a single homogeneous speech condition and the release/type must be recorded in any audit.
+- The current Common Voice language page was marked last updated 26 October 2026 and the legal terms are effective 31 October 2025; these are the current official pages observed during this audit.
+
+**Uncertainties and items requiring local verification:**
+
+- No audio files were downloaded or auditioned, so recording authenticity, intelligibility, speaker independence, duplication, noise, and clip-level quality were not independently verified.
+- No release metadata TSV was downloaded, so speaker IDs, demographic fields, validated/rejected partitions, duplicate rates, and exact clip/speaker counts remain unverified here; do not infer counts from catalog file sizes.
+- The checked current Indian-language evidence is for Scripted Speech v27.0. Availability, counts, and access may differ for Spontaneous Speech v5.0 or older releases.
+- The catalog text extractor could not render the dynamic MDC dataset-card download workflow; the email-gating statement is verified from the official FAQ, while any additional login or institutional restrictions remain unconfirmed.
+- The volunteer/read-aloud provenance is verified, but 'independent genuine speech' should be interpreted as independently contributed human recordings, not unscripted natural conversation; the corpus is crowdsourced and scripted for the main release audited.
+
+**Sources:** [26] [27] [28] [29] [30] [31] [32] [33]
+
+### FLEURS
+
+FLEURS is an official Google/Google Research multilingual speech benchmark and the speech version of the FLoRes machine-translation benchmark. Current authoritative mirrors are the Google-owned Hugging Face dataset and TensorFlow Datasets catalog. It contains genuine human read-speech recordings in the requested Hindi, Tamil, and Bengali configurations, but the utterance content is parallel, translated Wikipedia text rather than independently sampled spontaneous speech.
+
+**Access:** Publicly accessible on the current Google Hugging Face mirror and TensorFlow Datasets catalog; Hugging Face API status observed: private=false, gated=false, disabled=false. The card documents direct download and streaming via load_dataset. No login or approval gate was observed. I did not download and listen to audio in this audit; access and audio-field availability were verified from authoritative metadata/documentation.
+
+**Languages:** Hindi (hi_in), Tamil (ta_in), Bengali (bn_in)
+
+**License:** CC BY 4.0 (as declared by the current Google Hugging Face dataset card/repository metadata; the paper is also CC BY 4.0). Attribution, license linking, and indication of changes are required. Check privacy, publicity, moral-rights, and other rights separately for the intended use.
+
+**Verified findings:**
+
+- The FLEURS paper describes an n-way parallel speech dataset in 102 languages, built from FLoRes-101, with approximately 12 hours of speech supervision per language; it explicitly characterizes the speech as natural human speech with quality-controlled transcripts.
+- The paper says each sentence was recorded by three different native speakers where possible; recordings were checked by additional workers for correspondence to the input sentence, invalid recordings were discarded, and the audio was retained without augmentation at 16 kHz. This supports use as genuine human speech rather than TTS/synthetic audio.
+- The paper says FLEURS uses read speech from Wikipedia-derived sentences, with speaker-disjoint train/development versus test splits. Therefore it is suitable as an independent audio corpus for speech experiments, but it is not spontaneous/conversational speech and its text/audio content is parallel across languages.
+- The current Hugging Face Google dataset card explicitly lists Bengali (bn_in), Hindi (hi_in), and Tamil (ta_in), and documents loading language-specific configurations such as hi_in with the datasets library. The current TensorFlow Datasets catalog independently exposes fleurs.bn_in and fleurs.hi_in configurations; the page is the official XTREME-S/FLEURS catalog.
+- The Hugging Face repository API currently reports private=false, gated=false, and disabled=false. The dataset card provides public load_dataset and streaming examples, so no access request or authentication gate was observed for the public mirror.
+- The Hugging Face dataset card and repository metadata declare CC-BY-4.0. The linked Creative Commons deed permits sharing and adaptation, including commercially, provided attribution, license link, and change indication requirements are met; the deed cautions that publicity, privacy, moral-rights, or other rights may still apply.
+
+**Uncertainties and items requiring local verification:**
+
+- The official Google Research GitHub page could not be text-extracted by the web reader, so current repository contents were corroborated through the Google-owned Hugging Face mirror, its API, TFDS, and the paper.
+- I did not independently inspect decoded Hindi, Tamil, or Bengali waveforms or verify speaker identity, recording quality, or synthetic-audio absence by listening; the human/native-speaker/validation claims are from the authors' paper and dataset documentation.
+- The cited sources do not provide a complete, auditable public speaker roster or consent/rights records for each individual recording. Treat the CC-BY declaration as the dataset-level stated license, not as a substitute for checking downstream privacy/publicity obligations.
+
+**Sources:** [34] [35] [36] [37] [38] [39] [40] [41]
+
+### IndicVoices
+
+Current official distribution is AI4Bharat's Hugging Face dataset card. It describes IndicVoices as a multilingual human-speech corpus covering 22 Indian languages, including Hindi, Bengali, and Tamil, with read, extempore, and conversational recordings. The dataset is relevant as independent genuine speech because the authoritative description says it contains natural/spontaneous audio recorded from tens of thousands of speakers and documents a crowdsourced human-recording platform; however, audio itself could not be independently auditioned because Hugging Face access is gated.
+
+**Access:** Metadata/card and repository documentation are publicly viewable. Dataset files and content are gated behind Hugging Face information-sharing and acceptance of access conditions. Full-length audio is documented as separately downloadable from AI4Bharat object storage using v1-v5 language archives, but this audit did not download or inspect those archives/audio.
+
+**Languages:** Hindi, Tamil, Bengali, 22 Indian languages total (the official card does not provide a complete language list in the rendered text inspected)
+
+**License:** CC BY 4.0 (Creative Commons Attribution 4.0 International), as stated on the official dataset card. The license permits sharing and adaptation, including commercially, subject to attribution, license link, change indication, and no additional restrictions. The CC deed cautions that privacy, publicity, moral, or other third-party rights may still limit use of recorded voices.
+
+**Verified findings:**
+
+- The current Hugging Face card (AI4Bharat/IndicVoices) says the repository is publicly visible but requires the user to agree to share Hugging Face information and accept conditions before accessing files/content.
+- The current card reports 23.7K hours of read (8%), extempore (76%), and conversational (15%) audio from 51K speakers across 400+ Indian districts and 22 languages; it says 11.2K hours are transcribed (card update dated 23 December 2025). These are publisher-reported figures, not independently recomputed counts.
+- Hindi, Bengali, and Tamil are explicitly named in the card's full-length-audio URL examples, and the card states coverage of 22 languages; this verifies availability at the dataset level, but does not establish language-specific hours or speaker counts.
+- The card says curated audio and annotations are hosted on Hugging Face, while original full-length recordings are distributed separately as incremental non-overlapping v1-v5 archives with per-recording JSON metadata/annotations. It provides concrete object-storage URL patterns for Hindi, Bengali, Tamil, and other languages.
+- The ACL Findings 2024 paper describes IndicVoices as natural and spontaneous speech comprising read, extempore, and conversational audio from human speakers, and says collection used standardized protocols, prompts/conversation scenarios, quality control, and transcription guidelines.
+- The AI4Bharat GitHub README identifies Kathbath as the open-source crowdsourcing framework with an Android frontend for large-scale audio collection, supporting the interpretation that the corpus consists of human-recorded speech rather than generated/synthetic audio.
+- The official AI4Bharat dataset landing page currently says datasets are being moved to Hugging Face and links to the AI4Bharat Hugging Face organization, corroborating Hugging Face as the current distribution route.
+
+**Uncertainties and items requiring local verification:**
+
+- Exact Hindi, Tamil, and Bengali hours, speaker counts, clip counts, demographic breakdowns, and per-language transcription coverage were not available from the inspected rendered card; do not infer them from the overall totals.
+- The ACL 2024 paper and older GitHub README report earlier snapshots (7,348 hours/16,237 speakers and 12,000 hours/22,563 speakers respectively), which conflict with the current card's expanded figures. The current card should be treated as the current source, while the paper figures are historical.
+- Because the dataset files/audio were gated and not downloaded, I could not independently audition samples, verify that every item is genuine human speech, inspect JSON metadata, check consent/release fields, or test whether any synthetic/processed material is present. The genuine-speech assessment is therefore based on publisher documentation and collection methodology, not direct audio inspection.
+- The current official landing page is in a migration state and gives no standalone license or file inventory; licensing and access details were therefore taken from the current Hugging Face card and its linked CC BY page.
+
+**Sources:** [42] [43] [44] [45] [41]
+
+## References
+
+[1]: https://github.com/vdivyas/IndicSynth "github.com"
+[2]: https://huggingface.co/datasets/vdivyasharma/IndicSynth "huggingface.co"
+[3]: https://huggingface.co/api/datasets/vdivyasharma/IndicSynth "huggingface.co"
+[4]: https://aclanthology.org/2025.acl-long.1070/ "aclanthology.org"
+[5]: https://aclanthology.org/2025.acl-long.1070.pdf "aclanthology.org"
+[6]: https://github.com/vdivyas/IndicSynth/blob/main/LICENSE "github.com"
+[7]: https://creativecommons.org/licenses/by-nc/4.0/ "creativecommons.org"
+[8]: https://github.com/AI4Bharat/indicSUPERB "github.com"
+[9]: https://huggingface.co/datasets/ai4bharat/Kathbath "huggingface.co"
+[10]: https://arxiv.org/html/2208.11761v2 "arxiv.org"
+[11]: https://arxiv.org/abs/2208.11761 "arxiv.org"
+[12]: https://ojs.aaai.org/index.php/AAAI/article/view/26521 "ojs.aaai.org"
+[13]: https://aclanthology.org/2026.findings-acl.2159/ "aclanthology.org"
+[14]: https://aclanthology.org/2026.findings-acl.2159.pdf "aclanthology.org"
+[15]: https://arxiv.org/html/2604.19949v1 "arxiv.org"
+[16]: https://helixometry.github.io/IndicFake/ "helixometry.github.io"
+[17]: https://github.com/Helixometry/IndicFake "github.com"
+[18]: https://github.com/CodeVault-girish/Neural-Codecs "github.com"
+[19]: https://github.com/AI4Bharat/IndicSUPERB "github.com"
+[20]: https://arxiv.org/abs/2509.19865 "arxiv.org"
+[21]: https://arxiv.org/html/2509.19865v2 "arxiv.org"
+[22]: https://huggingface.co/datasets/Jack-ppkdczgx/SEA-Spoof "huggingface.co"
+[23]: https://huggingface.co/api/datasets/Jack-ppkdczgx/SEA-Spoof "huggingface.co"
+[24]: https://huggingface.co/datasets/Jack-ppkdczgx/SEA-Spoof/tree/main "huggingface.co"
+[25]: https://huggingface.co/datasets/Jack-ppkdczgx/SEA-Spoof/blob/main/LICENSE "huggingface.co"
+[26]: https://commonvoice.mozilla.org/en/faq "commonvoice.mozilla.org"
+[27]: https://commonvoice.mozilla.org/en/languages "commonvoice.mozilla.org"
+[28]: https://commonvoice.mozilla.org/en/terms "commonvoice.mozilla.org"
+[29]: https://mozilladatacollective.com/organization/cmfh0j9o10006ns07jq45h7xk "mozilladatacollective.com"
+[30]: https://github.com/common-voice/cv-dataset "github.com"
+[31]: https://mozilladatacollective.com/datasets/cmu5vlext009to107ev1s9lk8 "mozilladatacollective.com"
+[32]: https://mozilladatacollective.com/datasets/cmu5x7cbc00dqo1071wdidlpf "mozilladatacollective.com"
+[33]: https://mozilladatacollective.com/datasets/cmu61bhou00kxnq07tr6u5lta "mozilladatacollective.com"
+[34]: https://huggingface.co/datasets/google/fleurs "huggingface.co"
+[35]: https://huggingface.co/api/datasets/google/fleurs "huggingface.co"
+[36]: https://huggingface.co/datasets/google/fleurs/tree/main "huggingface.co"
+[37]: https://www.tensorflow.org/datasets/catalog/xtreme_s "www.tensorflow.org"
+[38]: https://github.com/google-research-datasets/fleurs "github.com"
+[39]: https://arxiv.org/abs/2205.12446 "arxiv.org"
+[40]: https://arxiv.org/html/2205.12446v1 "arxiv.org"
+[41]: https://creativecommons.org/licenses/by/4.0/ "creativecommons.org"
+[42]: https://huggingface.co/datasets/ai4bharat/IndicVoices "huggingface.co"
+[43]: https://github.com/AI4Bharat/IndicVoices "github.com"
+[44]: https://ai4bharat.iitm.ac.in/datasets/indicvoices "ai4bharat.iitm.ac.in"
+[45]: https://aclanthology.org/2024.findings-acl.639/ "aclanthology.org"

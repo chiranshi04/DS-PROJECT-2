@@ -1,0 +1,5 @@
+name: P2
+kind: leave_one_generator_out
+held_out_field: generator_id
+variants: [per_generator, grouped]
+splits: [train, dev, test]

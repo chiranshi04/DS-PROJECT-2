@@ -1,0 +1,4 @@
+name: P1
+kind: in_distribution
+split_field: speaker_id
+splits: [train, dev, test]

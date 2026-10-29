@@ -1,0 +1,5 @@
+name: P4
+kind: pairwise_language_transfer
+train_languages: [hi, ta, bn]
+test_languages: [hi, ta, bn]
+splits: [train, test]
