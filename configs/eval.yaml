@@ -1,0 +1,3 @@
+metrics: [accuracy, balanced_accuracy, precision, recall, f1, roc_auc]
+independent_genuine_required: true
+save_predictions: true

@@ -1,0 +1,4 @@
+output_dir: releases
+format: onnx
+opset: 17
+max_artifact_size_mb: 20

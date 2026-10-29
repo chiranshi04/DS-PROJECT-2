@@ -1,0 +1,4 @@
+compressions: [original, mp3_64k, opus_24k]
+noise_types: [clean, white]
+snr_db: [20, 10, 0]
+seed: 2025
