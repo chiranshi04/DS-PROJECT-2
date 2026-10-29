@@ -1,0 +1,8 @@
+sample_rate: 16000
+n_fft: 512
+hop_length: 160
+win_length: 400
+n_mels: 80
+f_min: 20
+f_max: 7600
+normalization: per_utterance

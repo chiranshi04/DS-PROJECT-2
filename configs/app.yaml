@@ -1,0 +1,4 @@
+host: 127.0.0.1
+port: 8000
+max_upload_size_mb: 20
+store_uploads: false

@@ -1,0 +1,7 @@
+name: baseline
+seed: 2025
+device: cpu
+batch_size: 32
+epochs: 20
+learning_rate: 0.001
+num_workers: 0
