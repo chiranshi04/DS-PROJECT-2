@@ -1,0 +1,34 @@
+audit_sources:
+  - name: IndicSynth
+    official_url: https://huggingface.co/datasets/vdivyasharma/IndicSynth
+    hf_repo_id: vdivyasharma/IndicSynth
+    languages: [hi, ta, bn]
+    role: synthetic speech and bona fide references
+  - name: IndicSUPERB / Kathbath
+    official_url: https://github.com/AI4Bharat/indicSUPERB
+    hf_repo_id: ai4bharat/Kathbath
+    languages: [hi, ta, bn]
+    role: genuine speech source/reference
+  - name: Indic-CodecFake
+    official_url: https://github.com/Helixometry/IndicFake
+    languages: [hi, ta, bn]
+    role: unseen neural-codec synthesis test
+  - name: SEA-Spoof
+    official_url: https://huggingface.co/datasets/Jack-ppkdczgx/SEA-Spoof
+    hf_repo_id: Jack-ppkdczgx/SEA-Spoof
+    languages: [hi, ta]
+    role: external spoof test
+  - name: Common Voice
+    official_url: https://commonvoice.mozilla.org/en/faq
+    languages: [hi, ta, bn]
+    role: independent genuine speech evaluation
+  - name: FLEURS
+    official_url: https://huggingface.co/datasets/google/fleurs
+    hf_repo_id: google/fleurs
+    languages: [hi, ta, bn]
+    role: independent genuine speech evaluation
+  - name: IndicVoices
+    official_url: https://huggingface.co/datasets/ai4bharat/IndicVoices
+    hf_repo_id: ai4bharat/IndicVoices
+    languages: [hi, ta, bn]
+    role: independent genuine speech evaluation

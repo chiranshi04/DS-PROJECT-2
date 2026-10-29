@@ -1,0 +1,4 @@
+name: P5
+kind: external_test_only
+external_corpora: [SEA-Spoof, Indic-CodecFake, Common Voice, FLEURS, IndicVoices]
+splits: [test]
