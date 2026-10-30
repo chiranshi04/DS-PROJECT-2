@@ -1,4 +1,20 @@
-compressions: [original, mp3_64k, opus_24k]
-noise_types: [clean, white]
-snr_db: [20, 10, 0]
+sample_rate: 16000
 seed: 2025
+codecs:
+  mp3: [128k, 64k, 32k]
+  aac: [64k]
+  opus: [24k, 12k]
+  g711: [telephone_band]
+noise:
+  source: colored_noise
+  license: "Synthetic colored noise; no external recording license"
+  snr_db: [20, 10, 5, 0]
+reverb:
+  rt60_s: [0.2, 0.35, 0.6]
+resampling:
+  intermediate_rate: [8000]
+lowpass_hz: [3500, 2500]
+duration_seconds: [1, 2, 3, 4]
+augmentation:
+  enabled: false
+  operations: [noise, reverb, resample, lowpass]

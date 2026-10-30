@@ -18,7 +18,7 @@ train:
 evaluate:
 	python -m indivoice.eval --run $(or $(RUN),runs/p1_b1_small) --protocol $(or $(PROTOCOL),P1) --split $(or $(SPLIT),test)
 robustness:
-	python scripts/robustness.py
+	python -m indivoice.robustness --scores $(SCORES) --fixed-threshold $(THRESHOLD) --output-dir $(or $(OUT),results/robustness)
 export:
 	python scripts/export.py
 app:
