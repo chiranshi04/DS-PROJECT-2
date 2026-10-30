@@ -20,6 +20,6 @@ evaluate:
 robustness:
 	python -m indivoice.robustness --scores $(SCORES) --fixed-threshold $(THRESHOLD) --output-dir $(or $(OUT),results/robustness)
 export:
-	python scripts/export.py
+	python -m indivoice.export --checkpoint $(CHECKPOINT) --output $(or $(OUTPUT),releases/b1.onnx) --variant $(or $(VARIANT),small)
 app:
 	uvicorn app.main:app --host 127.0.0.1 --port 8000

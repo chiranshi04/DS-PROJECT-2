@@ -11,7 +11,11 @@ venv/
 /data/
 artifacts/
 checkpoints/
-models/
+/models/
+!models/
+!models/MODEL_CARD.md
+!src/indivoice/models/
+!src/indivoice/models/*.py
 /cache/
 /runs/
 results/*

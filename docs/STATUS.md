@@ -111,3 +111,9 @@ Phase 5 fixture verification covers known AUC/EER, dev-only fixed thresholds, sp
 Implemented deterministic codec, noise, reverberation, resampling, low-pass, and duration degradations; seeded training-time augmentation; and a scored-degradation runner that writes JSON, CSV, and EER plots. The requested levels are versioned in `configs/robustness.yaml`, and the exact generation details are documented in `docs/ROBUSTNESS.md`.
 
 Fixture tests verify rate preservation, determinism, input difference, augmentation behavior, and scored output generation. No real trained-model robustness run or real-data robustness result was produced.
+
+## Phase 7 — efficiency and ONNX export
+
+Implemented B1 ONNX export with feature/calibration/threshold metadata, PyTorch-versus-ONNX Runtime parity assertions, optional dynamic INT8 quantization with dev-set comparison support, and a benchmark script that records actual CPU, OS, file-size, latency, real-time-factor, and memory values. Added the model card at `models/MODEL_CARD.md`.
+
+Temporary fixture weights are used only for export/parity tests. No real trained checkpoint, real-data accuracy comparison, or benchmark result was produced.
