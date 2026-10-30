@@ -1,0 +1,7 @@
+name: model_size
+model: b1
+variants: [tiny, small]
+train_manifest: data/manifests/P1_train.csv
+dev_manifest: data/manifests/P1_dev.csv
+run_dir: runs/model_size
+seed: 2025

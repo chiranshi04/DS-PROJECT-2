@@ -70,3 +70,25 @@ Verified on 2026-10-30:
 - `scripts/visualize_examples.py` generated one local real and one local synthetic fixture plot without downloading data.
 
 No real project audio, generated feature cache, or visualization artifact was committed. The feature implementation is ready for later training and augmentation phases.
+
+## Phase 4 — models and training
+
+Implemented:
+
+- B0 LFCC plus scikit-learn GMM baseline with synthetic-minus-genuine log-likelihood-ratio scoring.
+- B1 tiny and small ResNet-style log-Mel CNN variants with global pooling and one logit output.
+- B2 compact raw-waveform strided-convolution model.
+- B3 optional frozen Hugging Face SSL backbone/head wrapper, disabled by default and documented as a reference upper bound.
+- AdamW training engine with cosine decay, weighted BCE-with-logits, gradient clipping, CUDA AMP when available, EER-based early stopping, best/last checkpoints, CSV metrics, and resolved-config JSON.
+- Config-driven CLI and requested P1/P2/P3/P4 plus ablation experiment YAMLs.
+- CPU fixture tests for model shapes, parameter limits, GMM likelihood ratios, checkpoint/log creation, and decreasing training loss.
+
+Verified on 2026-10-30:
+
+- `make test` — passed: 21 tests.
+- `make lint` — passed.
+- B1 parameter counts: tiny 120,689; small 270,889. Both are below 1,000,000 trainable parameters.
+- B1 fixture training completed on CPU and reduced training loss.
+- The CLI correctly refused to start a real-data run when verified train/dev manifests were absent.
+
+No real-data training experiment was run, so no scientific training metric or model performance result is reported. B3 was not downloaded or initialized.

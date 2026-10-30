@@ -1,0 +1,8 @@
+name: p1_b0_gmm
+model: b0
+feature: lfcc
+n_components: 8
+train_manifest: data/manifests/P1_train.csv
+dev_manifest: data/manifests/P1_dev.csv
+run_dir: runs/p1_b0_gmm
+seed: 2025

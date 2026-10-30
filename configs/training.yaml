@@ -1,0 +1,11 @@
+seed: 2025
+device: cpu
+batch_size: 16
+epochs: 10
+learning_rate: 0.001
+weight_decay: 0.0001
+gradient_clip: 1.0
+patience: 5
+mixed_precision: true
+num_workers: 0
+run_dir: runs/default

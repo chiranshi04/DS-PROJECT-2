@@ -1,0 +1,9 @@
+name: codec_aug_on_off
+model: b1
+variant: small
+ablation: codec_augmentation
+codec_augmentation: false
+train_manifest: data/manifests/P1_train.csv
+dev_manifest: data/manifests/P1_dev.csv
+run_dir: runs/codec_aug_on_off
+seed: 2025

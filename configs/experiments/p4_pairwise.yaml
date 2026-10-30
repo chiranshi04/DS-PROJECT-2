@@ -1,0 +1,13 @@
+name: p4_pairwise
+model: b1
+variant: small
+protocol: P4
+train_manifest: data/manifests/P4_train.csv
+dev_manifest: data/manifests/P4_dev.csv
+run_dir: runs/p4_pairwise
+seed: 2025
+batch_size: 16
+epochs: 20
+learning_rate: 0.001
+patience: 5
+device: cpu
