@@ -1,4 +1,9 @@
 host: 127.0.0.1
 port: 8000
+model_path: releases/b1.onnx
 max_upload_size_mb: 20
+max_seconds: 60
 store_uploads: false
+fixed_threshold: 0.0
+band_lower: -0.5
+band_upper: 0.5

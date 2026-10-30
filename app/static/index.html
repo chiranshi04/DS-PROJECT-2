@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>InDivoice research demo</title><link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">InDivoice</p><h1>Speech authenticity research demo</h1><p>Upload an audio clip to inspect a model confidence indication. This is not a truth detector.</p></header>
+    <section class="limitations"><strong>Limitations</strong><p>This is a research demo; a result does not prove that audio is synthetic or genuine; synthetic speech does not mean fraud; genuine speech does not mean trustworthy; the model may fail on unseen voice generators, languages, and heavy noise or compression; do not use it as the sole basis for any decision.</p></section>
+    <section id="model-status" class="status"></section>
+    <section class="card upload-card"><label id="drop-zone" for="file-input"><span>Drop audio here</span><small>or choose a file — WAV, MP3, FLAC, OGG, M4A, OPUS; up to 20 MB and 60 seconds</small></label><input id="file-input" type="file" accept=".wav,.mp3,.flac,.ogg,.m4a,.opus,audio/*"><button id="analyze" disabled>Analyze clip</button><p id="message" role="status"></p></section>
+    <section id="result" class="card hidden"><div class="result-head"><div><p class="eyebrow">Outcome</p><h2 id="band"></h2><p id="explanation">The score is a model confidence indication, not a probability of truth.</p></div><div class="score"><span id="score"></span><small>model confidence indication</small></div></div><h3>Waveform</h3><canvas id="waveform" height="120"></canvas><h3>Window timeline</h3><div id="timeline" class="timeline"></div><h3>Warnings</h3><ul id="warnings"></ul><p id="duration"></p></section>
+  </main><script src="/static/app.js"></script>
+</body></html>
