@@ -12,9 +12,11 @@ venv/
 artifacts/
 checkpoints/
 models/
+/cache/
 results/*
 !results/.gitkeep
 !results/data_audit.json
+results/examples/
 *.wav
 *.mp3
 *.flac

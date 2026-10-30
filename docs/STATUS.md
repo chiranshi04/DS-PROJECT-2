@@ -49,3 +49,24 @@ Could not verify:
 - No audio or gated dataset content was downloaded. Exact per-language file counts, durations, sampling rates, speaker/gender tables, and audio quality remain unverified where the authoritative sources only publish aggregate claims or access is gated.
 - No file-level speaker or source-utterance overlap counts could be computed. Indic-CodecFake/IndicSUPERB real-side overlap is documented as expected by construction, but other overlap claims remain unverified without comparable manifests.
 - No scientific metrics, model training, or result plots were produced.
+
+## Phase 3 — audio preprocessing and features
+
+Implemented:
+
+- Common-format loader with soundfile, torchaudio, and ffmpeg fallback; mono conversion, 16 kHz resampling, peak normalization, corrupt/empty/silent-file exceptions, and optional silence trimming.
+- Fixed 4-second windows with random seeded training crops, deterministic 50%-overlap evaluation windows, zero padding or explicit tiling for short clips, and original-duration metadata.
+- CPU log-Mel and LFCC extractors, configurable through `configs/features.yaml`.
+- Manifest-backed PyTorch Dataset/DataLoader with optional cache directory and augmentation callable hook.
+- Local-only spectrogram visualization script and generated sine/noise fixture tests.
+
+Verified on 2026-10-30:
+
+- `pytest` — passed: 17 tests.
+- `ruff check .` — passed.
+- CPU log-Mel shape: `(80, 401)` for a 4-second crop.
+- CPU LFCC shape: `(40, 401)` for a 4-second crop.
+- Determinism, normalization, sample-rate conversion, padding, tiling, corruption guards, silence-trimming ablation, dataset loading, and cache writes were exercised.
+- `scripts/visualize_examples.py` generated one local real and one local synthetic fixture plot without downloading data.
+
+No real project audio, generated feature cache, or visualization artifact was committed. The feature implementation is ready for later training and augmentation phases.

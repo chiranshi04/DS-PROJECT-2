@@ -1,8 +1,16 @@
 sample_rate: 16000
+crop_seconds: 4.0
+window_overlap: 0.5
+short_mode: zero
+trim_silence: false
 n_fft: 512
 hop_length: 160
 win_length: 400
 n_mels: 80
 f_min: 20
 f_max: 7600
+eps: 1.0e-6
+lfcc_coefficients: 40
+lfcc_filters: 128
 normalization: per_utterance
+cache_dir: cache/features
