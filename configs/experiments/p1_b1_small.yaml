@@ -1,0 +1,13 @@
+name: p1_b1_small
+model: b1
+variant: small
+train_manifest: data/manifests/P1_train.csv
+dev_manifest: data/manifests/P1_dev.csv
+run_dir: runs/p1_b1_small
+seed: 2025
+batch_size: 16
+epochs: 20
+learning_rate: 0.001
+patience: 5
+device: cpu
+mixed_precision: true

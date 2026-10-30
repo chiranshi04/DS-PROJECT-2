@@ -13,6 +13,7 @@ artifacts/
 checkpoints/
 models/
 /cache/
+/runs/
 results/*
 !results/.gitkeep
 !results/data_audit.json

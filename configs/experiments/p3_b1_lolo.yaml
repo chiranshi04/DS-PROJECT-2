@@ -1,0 +1,13 @@
+name: p3_b1_lolo
+model: b1
+variant: small
+protocol: P3
+train_manifest: data/manifests/P3_train.csv
+dev_manifest: data/manifests/P3_dev.csv
+run_dir: runs/p3_b1_lolo
+seed: 2025
+batch_size: 16
+epochs: 20
+learning_rate: 0.001
+patience: 5
+device: cpu

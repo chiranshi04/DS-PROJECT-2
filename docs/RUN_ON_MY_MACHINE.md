@@ -33,3 +33,32 @@ The builder writes P1, P2 per-generator/grouped, P3 per-language, P4 pairwise-la
 Before using a candidate independent genuine corpus, create a comparable manifest and compare it with the IndicSynth bona fide/reference manifest using `compare_metadata_overlap`. A zero result is evidence only for the fields and versions actually compared; it is not a general proof of independence.
 
 Do not commit audio, datasets, credentials, gated content, or checkpoints. Record the exact source version, download command, license acceptance, manifest hash, and command output in the experiment record.
+
+## Phase 4 model training
+
+After creating verified protocol manifests and installing dependencies:
+
+```bash
+make train EXP=p1_b1_small
+python -m indivoice.train --config configs/experiments/p1_b1_small.yaml
+```
+
+The CLI requires real `train_manifest` and `dev_manifest` paths and refuses to start when they are missing. It writes the resolved configuration, CSV metrics, `best.pt`, and `last.pt` under the configured run directory. Training uses AdamW, cosine learning-rate decay, weighted BCE-with-logits, gradient clipping, early stopping on development EER, and CUDA mixed precision when enabled and available. B3 is intentionally off by default and requires an additional Transformers environment and substantial disk/GPU memory.
+
+For the lightweight B1 model, expect approximately 0.1–1 MB of model weights, under 5 MB for an ONNX export, and CPU training time that depends on the manifest size and number of epochs. A small fixture run completes in seconds; a real multi-hour corpus may require hours on CPU. Feature caches can approach the size of the decoded dataset and should be placed on a persistent disk outside Git. GPU training is optional for B1/B2; 8 GB VRAM is a practical starting point for larger batches, while the B3 reference may require substantially more.
+
+A Colab-friendly sequence is:
+
+```bash
+!git clone https://github.com/chiranshi04/DS-PROJECT-2.git
+%cd DS-PROJECT-2
+!pip install -r requirements-dev.txt
+!pip install -e .
+!python scripts/audit_data.py --output /content/data_audit.json
+# After licensed data download and manifest creation:
+!python scripts/build_manifests.py
+!python -m indivoice.train --config configs/experiments/p1_b1_small.yaml
+!pytest
+```
+
+No Phase 4 real-data training result is reported by this repository until the exact dataset version, manifest, configuration, and command are recorded.
