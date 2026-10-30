@@ -105,3 +105,9 @@ Implemented:
 - Report builder that refuses missing or non-evaluation JSONs.
 
 Phase 5 fixture verification covers known AUC/EER, dev-only fixed thresholds, speaker-clustered bootstrap behavior, aggregation, and temperature serialization. No real-data evaluation JSON, CSV, plot, or performance result was produced.
+
+## Phase 6 — robustness experiments
+
+Implemented deterministic codec, noise, reverberation, resampling, low-pass, and duration degradations; seeded training-time augmentation; and a scored-degradation runner that writes JSON, CSV, and EER plots. The requested levels are versioned in `configs/robustness.yaml`, and the exact generation details are documented in `docs/ROBUSTNESS.md`.
+
+Fixture tests verify rate preservation, determinism, input difference, augmentation behavior, and scored output generation. No real trained-model robustness run or real-data robustness result was produced.
