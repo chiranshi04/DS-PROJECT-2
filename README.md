@@ -46,3 +46,7 @@ Useful commands are listed in the `Makefile`. Phase 1 intentionally contains inf
 - `tests/` — automated tests
 - `docs/` — status, decisions, and dataset provenance template
 - `results/` — only outputs from real, recorded runs
+
+## Web demo privacy
+
+The local FastAPI demo processes uploads in memory or in a request-local temporary file that is deleted immediately after decoding. It does not log audio bytes, file names, or predictions. The app accepts files up to 20 MB and 60 seconds, and refuses to start inference when the configured ONNX model is missing; it never fabricates a prediction. Do not expose the demo publicly without adding authentication, rate limits, encrypted transport, and a reviewed retention policy.

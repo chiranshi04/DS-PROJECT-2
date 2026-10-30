@@ -76,3 +76,17 @@ python scripts/make_report_tables.py --results-dir results
 The runner requires `predictions_<protocol>_dev.csv` and `predictions_<protocol>_<split>.csv`; it refuses to create placeholders when either is absent. Each prediction CSV must include `logit`, `label`, `speaker_id`, `language`, and `source_corpus`, with optional `utterance_id`, `generator_id`, and `gender`. Mean or median window logits are aggregated by utterance before scoring. Temperature scaling and the fixed operating threshold are fitted on development predictions only and saved as `temperature.json`. Test EER is reported with its own threshold only as a comparison; it is never used as the fixed deployment threshold.
 
 Evaluation writes JSON and CSV results under `results/`, plus language-transfer heatmaps for P3/P4. Confidence intervals resample speakers, not files, with 1,000 bootstrap resamples by default. The report builder refuses to run if actual evaluation JSONs are missing.
+
+## Phase 8 web demo
+
+Place a verified B1 ONNX export at `releases/b1.onnx` with its JSON sidecar, then run:
+
+```bash
+make app
+# open http://127.0.0.1:8000
+# or: docker build -t indivoice-demo . && docker run --rm -p 8000:8000 -v "$PWD/releases:/app/releases:ro" indivoice-demo
+```
+
+The app accepts WAV, MP3, FLAC, OGG, M4A, and OPUS files up to 20 MB and 60 seconds. It decodes through the same preprocessing path, uses deterministic multi-window inference, applies the exported temperature and threshold metadata, and shows warnings plus the fixed limitations panel. If the configured model is absent, `/health` reports `model_available: false`, the page shows “Model not found,” and `/analyze` returns HTTP 503; no prediction is fabricated.
+
+Uploads are read into memory or a request-local temporary file that is deleted immediately after decoding. Audio bytes, file names, and predictions are not logged by the application. This is a local research demo; do not expose it publicly without adding authentication, rate limits, encrypted transport, and a reviewed data-retention policy.

@@ -117,3 +117,9 @@ Fixture tests verify rate preservation, determinism, input difference, augmentat
 Implemented B1 ONNX export with feature/calibration/threshold metadata, PyTorch-versus-ONNX Runtime parity assertions, optional dynamic INT8 quantization with dev-set comparison support, and a benchmark script that records actual CPU, OS, file-size, latency, real-time-factor, and memory values. Added the model card at `models/MODEL_CARD.md`.
 
 Temporary fixture weights are used only for export/parity tests. No real trained checkpoint, real-data accuracy comparison, or benchmark result was produced.
+
+## Phase 8 — web demo
+
+Implemented the FastAPI CPU web demo with drag-and-drop/plain HTML frontend, in-memory or immediately deleted temporary upload handling, 20 MB and 60-second limits, accepted common audio formats, windowed ONNX inference, saved temperature and threshold metadata, score bands, per-window timeline, waveform display, warnings, health endpoint, Dockerfile, and a persistent limitations panel.
+
+Verified with HTTP fixture tests for successful schema output, model-missing behavior, invalid files, oversized files, warnings, and limitations text. `make test` passed 37 tests and `make lint` passed. No trained ONNX model is available, so no real prediction or model-performance result was produced.
