@@ -5,13 +5,21 @@ from __future__ import annotations
 import csv
 import hashlib
 from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 COLUMNS = [
-    "path_or_uri", "sha256", "label", "language", "speaker_id", "source_corpus",
-    "generator_id", "duration_s", "sample_rate", "split",
+    "path_or_uri",
+    "sha256",
+    "label",
+    "language",
+    "speaker_id",
+    "source_corpus",
+    "generator_id",
+    "duration_s",
+    "sample_rate",
+    "split",
 ]
 
 
@@ -52,10 +60,15 @@ def read_manifest(path: str | Path) -> list[ManifestRecord]:
             raise ValueError(f"Manifest is missing columns: {sorted(missing)}")
         return [
             ManifestRecord(
-                path_or_uri=row["path_or_uri"], sha256=row["sha256"], label=int(row["label"]),
-                language=row["language"], speaker_id=row["speaker_id"],
-                source_corpus=row["source_corpus"], generator_id=row["generator_id"],
-                duration_s=float(row["duration_s"]), sample_rate=int(row["sample_rate"]),
+                path_or_uri=row["path_or_uri"],
+                sha256=row["sha256"],
+                label=int(row["label"]),
+                language=row["language"],
+                speaker_id=row["speaker_id"],
+                source_corpus=row["source_corpus"],
+                generator_id=row["generator_id"],
+                duration_s=float(row["duration_s"]),
+                sample_rate=int(row["sample_rate"]),
                 split=row["split"],
             )
             for row in rows
@@ -82,14 +95,18 @@ def _groups(records: Iterable[ManifestRecord], key: str) -> dict[str, set[str]]:
 
 def validate_speaker_disjoint(records: Iterable[ManifestRecord]) -> None:
     """Fail when a speaker appears in more than one split."""
-    violations = {key: splits for key, splits in _groups(records, "speaker_id").items() if len(splits) > 1}
+    violations = {
+        key: splits for key, splits in _groups(records, "speaker_id").items() if len(splits) > 1
+    }
     if violations:
         raise ValueError(f"Speaker leakage across splits: {violations}")
 
 
 def validate_generator_disjoint(records: Iterable[ManifestRecord], held_out: set[str]) -> None:
     """Fail when any held-out generator occurs in a training row."""
-    leaked = sorted({record.generator_id for record in records if record.split == "train"} & held_out)
+    leaked = sorted(
+        {record.generator_id for record in records if record.split == "train"} & held_out
+    )
     if leaked:
         raise ValueError(f"Held-out generators in training: {leaked}")
 
@@ -115,8 +132,12 @@ def validate_hash_disjoint(records: Iterable[ManifestRecord]) -> None:
         raise ValueError(f"Duplicate file hashes across splits: {sorted(violations)}")
 
 
-def validate_records(records: Iterable[ManifestRecord], *, held_out_generators: set[str] | None = None,
-                     held_out_languages: set[str] | None = None) -> None:
+def validate_records(
+    records: Iterable[ManifestRecord],
+    *,
+    held_out_generators: set[str] | None = None,
+    held_out_languages: set[str] | None = None,
+) -> None:
     """Apply all checks relevant to one protocol manifest."""
     materialized = list(records)
     validate_speaker_disjoint(materialized)
@@ -132,7 +153,9 @@ def limit_balanced_records(
     max_hours_per_language_per_class: float | None = None,
 ) -> list[ManifestRecord]:
     """Apply a deterministic per-language/class duration cap."""
-    materialized = sorted(records, key=lambda record: (record.language, record.label, record.path_or_uri))
+    materialized = sorted(
+        records, key=lambda record: (record.language, record.label, record.path_or_uri)
+    )
     if max_hours_per_language_per_class is None:
         return materialized
     cap_seconds = max_hours_per_language_per_class * 3600
@@ -141,7 +164,8 @@ def limit_balanced_records(
         for label in (0, 1):
             elapsed = 0.0
             candidates = [
-                record for record in materialized
+                record
+                for record in materialized
                 if record.language == language and record.label == label
             ]
             for record in candidates:
@@ -159,7 +183,9 @@ def _replace_split(record: ManifestRecord, split: str) -> ManifestRecord:
     return ManifestRecord(**values)
 
 
-def assign_protocol(records: Iterable[ManifestRecord], protocol: str, held_out: str | None = None) -> list[ManifestRecord]:
+def assign_protocol(
+    records: Iterable[ManifestRecord], protocol: str, held_out: str | None = None
+) -> list[ManifestRecord]:
     """Assign a source manifest to one deterministic protocol variant."""
     materialized = list(records)
     if protocol == "P1":
@@ -167,21 +193,32 @@ def assign_protocol(records: Iterable[ManifestRecord], protocol: str, held_out: 
     if protocol == "P2":
         if held_out is None:
             raise ValueError("P2 requires held_out generator")
-        return [_replace_split(record, "test" if record.generator_id == held_out else record.split) for record in materialized]
+        return [
+            _replace_split(record, "test" if record.generator_id == held_out else record.split)
+            for record in materialized
+        ]
     if protocol == "P3":
         if held_out is None:
             raise ValueError("P3 requires held_out language")
-        return [_replace_split(record, "test" if record.language == held_out else record.split) for record in materialized]
+        return [
+            _replace_split(record, "test" if record.language == held_out else record.split)
+            for record in materialized
+        ]
     if protocol == "P4":
         if held_out is None:
             raise ValueError("P4 requires test language")
-        return [_replace_split(record, "test" if record.language == held_out else "train") for record in materialized]
+        return [
+            _replace_split(record, "test" if record.language == held_out else "train")
+            for record in materialized
+        ]
     if protocol == "P5":
         return [_replace_split(record, "test") for record in materialized]
     raise ValueError(f"Unknown protocol: {protocol}")
 
 
-def compare_metadata_overlap(left: Iterable[ManifestRecord], right: Iterable[ManifestRecord]) -> dict[str, int]:
+def compare_metadata_overlap(
+    left: Iterable[ManifestRecord], right: Iterable[ManifestRecord]
+) -> dict[str, int]:
     """Compare speaker IDs and source paths between two metadata manifests."""
     left_records, right_records = list(left), list(right)
     left_speakers = {record.speaker_id for record in left_records if record.speaker_id}
