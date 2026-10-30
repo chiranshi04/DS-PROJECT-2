@@ -62,3 +62,17 @@ A Colab-friendly sequence is:
 ```
 
 No Phase 4 real-data training result is reported by this repository until the exact dataset version, manifest, configuration, and command are recorded.
+
+## Phase 5 evaluation
+
+After a real training run has produced prediction CSVs for both development and test data, run:
+
+```bash
+python -m indivoice.eval --run runs/p1_b1_small --protocol P1 --split test
+make evaluate RUN=runs/p1_b1_small PROTOCOL=P1 SPLIT=test
+python scripts/make_report_tables.py --results-dir results
+```
+
+The runner requires `predictions_<protocol>_dev.csv` and `predictions_<protocol>_<split>.csv`; it refuses to create placeholders when either is absent. Each prediction CSV must include `logit`, `label`, `speaker_id`, `language`, and `source_corpus`, with optional `utterance_id`, `generator_id`, and `gender`. Mean or median window logits are aggregated by utterance before scoring. Temperature scaling and the fixed operating threshold are fitted on development predictions only and saved as `temperature.json`. Test EER is reported with its own threshold only as a comparison; it is never used as the fixed deployment threshold.
+
+Evaluation writes JSON and CSV results under `results/`, plus language-transfer heatmaps for P3/P4. Confidence intervals resample speakers, not files, with 1,000 bootstrap resamples by default. The report builder refuses to run if actual evaluation JSONs are missing.

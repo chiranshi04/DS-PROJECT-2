@@ -25,3 +25,5 @@ results/examples/
 *.pt
 *.pth
 *.ckpt
+results/evaluation_tables.md
+results/evaluation_auc.png

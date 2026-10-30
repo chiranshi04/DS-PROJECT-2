@@ -92,3 +92,16 @@ Verified on 2026-10-30:
 - The CLI correctly refused to start a real-data run when verified train/dev manifests were absent.
 
 No real-data training experiment was run, so no scientific training metric or model performance result is reported. B3 was not downloaded or initialized.
+
+## Phase 5 — evaluation protocols and metrics
+
+Implemented:
+
+- ROC-AUC, EER with threshold, dev-fixed FPR/FNR, test EER-threshold comparison and threshold gaps, minDCF, ECE, and reliability-bin data.
+- Speaker-clustered bootstrap confidence intervals for AUC and EER with 1,000 resamples by default.
+- Mean/median window-logit aggregation by utterance.
+- Development-only temperature scaling saved with each evaluation run.
+- Protocol runner with language, generator, gender, and source-corpus breakdowns; independent-genuine FPR summaries; P2/P3/P4-compatible output and transfer heatmaps.
+- Report builder that refuses missing or non-evaluation JSONs.
+
+Phase 5 fixture verification covers known AUC/EER, dev-only fixed thresholds, speaker-clustered bootstrap behavior, aggregation, and temperature serialization. No real-data evaluation JSON, CSV, plot, or performance result was produced.
