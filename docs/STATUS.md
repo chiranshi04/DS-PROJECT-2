@@ -123,3 +123,7 @@ Temporary fixture weights are used only for export/parity tests. No real trained
 Implemented the FastAPI CPU web demo with drag-and-drop/plain HTML frontend, in-memory or immediately deleted temporary upload handling, 20 MB and 60-second limits, accepted common audio formats, windowed ONNX inference, saved temperature and threshold metadata, score bands, per-window timeline, waveform display, warnings, health endpoint, Dockerfile, and a persistent limitations panel.
 
 Verified with HTTP fixture tests for successful schema output, model-missing behavior, invalid files, oversized files, warnings, and limitations text. `make test` passed 37 tests and `make lint` passed. No trained ONNX model is available, so no real prediction or model-performance result was produced.
+
+## Phase 9 — documentation and reproducibility package
+
+Rewrote README with installation, full audit-to-app reproduction commands, hardware expectations, results policy, and contribution checks. Added experiment mapping, methodology, limitations, paper outline, Citation File Format metadata, and expanded third-party provenance. Documentation claims were checked against the committed configs/scripts and the Phase 2 audit; no real-data performance table is included because `results/` contains no experiment result JSON/CSV.
