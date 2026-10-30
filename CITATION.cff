@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use InDivoice, please cite the repository and the datasets or papers that you actually use."
+title: "InDivoice: Reproducible multilingual synthetic speech detection research system"
+type: software
+version: 0.1.0
+url: https://github.com/chiranshi04/DS-PROJECT-2
+repository-code: https://github.com/chiranshi04/DS-PROJECT-2
+license: MIT
+authors:
+  - family-names: "InDivoice contributors"
+    given-names: "Project"
+keywords:
+  - speech deepfake detection
+  - synthetic speech
+  - Indian languages
+  - reproducibility
+references:
+  - type: conference-paper
+    authors:
+      - family-names: Sharma
+        given-names: "Divya V"
+      - family-names: Ekbote
+        given-names: Vijval
+      - family-names: Gupta
+        given-names: Anubha
+    title: "IndicSynth: A Large-Scale Multilingual Synthetic Speech Dataset for Low-Resource Indian Languages"
+    year: 2025
+    doi: 10.18653/v1/2025.acl-long.1070
+  - type: article
+    authors:
+      - family-names: Javed
+        given-names: Tahir
+      - family-names: Bhogale
+        given-names: "Kaushal Santosh"
+      - family-names: Raman
+        given-names: Abhigyan
+      - family-names: Kunchukuttan
+        given-names: Anoop
+      - family-names: Kumar
+        given-names: Pratyush
+      - family-names: Khapra
+        given-names: "Mitesh M."
+    title: "IndicSUPERB: A Speech Processing Universal Performance Benchmark for Indian languages"
+    year: 2022
+    url: https://arxiv.org/abs/2208.11761
+  - type: conference-paper
+    authors:
+      - family-names: Girish
+        given-names: ""
+      - family-names: Akhtar
+        given-names: "Mohd Mujtaba"
+      - family-names: "Chetia Phukan"
+        given-names: Orchid
+      - family-names: Buduru
+        given-names: "Arun Balaji"
+    title: "Indic-CodecFake meets SATYAM: Towards Detecting Neural Audio Codec Synthesized Speech Deepfakes in Indic Languages"
+    year: 2026
+    doi: 10.18653/v1/2026.findings-acl.2159
