@@ -16,7 +16,7 @@ build-manifests:
 train:
 	python -m indivoice.train --config configs/experiments/$(or $(EXP),p1_b1_small).yaml
 evaluate:
-	python scripts/evaluate.py
+	python -m indivoice.eval --run $(or $(RUN),runs/p1_b1_small) --protocol $(or $(PROTOCOL),P1) --split $(or $(SPLIT),test)
 robustness:
 	python scripts/robustness.py
 export:

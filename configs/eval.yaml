@@ -1,3 +1,9 @@
-metrics: [accuracy, balanced_accuracy, precision, recall, f1, roc_auc]
+metrics: [roc_auc, eer, fpr, fnr, min_dcf, ece]
+bootstrap_resamples: 1000
+confidence_level: 0.95
+window_score_aggregation: mean
+threshold_selection: dev_youden_j
+calibration: temperature_scaling_dev_only
+reliability_bins: 10
 independent_genuine_required: true
 save_predictions: true
