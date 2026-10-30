@@ -1,4 +1,11 @@
 output_dir: releases
 format: onnx
 opset: 17
-max_artifact_size_mb: 20
+variant: small
+input_shape: [1, 80, 401]
+max_artifact_size_mb: 5
+quantize_dynamic_int8: false
+parity_rtol: 1.0e-4
+parity_atol: 1.0e-5
+benchmark_runs: 100
+benchmark_warmup: 10
