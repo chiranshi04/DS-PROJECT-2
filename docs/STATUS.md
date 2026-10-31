@@ -127,3 +127,77 @@ Verified with HTTP fixture tests for successful schema output, model-missing beh
 ## Phase 9 — documentation and reproducibility package
 
 Rewrote README with installation, full audit-to-app reproduction commands, hardware expectations, results policy, and contribution checks. Added experiment mapping, methodology, limitations, paper outline, Citation File Format metadata, and expanded third-party provenance. Documentation claims were checked against the committed configs/scripts and the Phase 2 audit; no real-data performance table is included because `results/` contains no experiment result JSON/CSV.
+
+## Phase 10 — final QA and release audit
+
+Final audit performed on the `phase-10-release` branch:
+
+| Component | Status | What was verified / what must be run on the user GPU machine |
+|---|---|---|
+| Repository scaffold, configuration, seed utility, CI, and packaging | done | Already implemented and covered by the full test suite. |
+| Dataset source audit and provenance record | done | `results/data_audit.json` is the only tracked result artifact and was produced by `make audit-data` using `configs/data_sources.yaml`. Re-run after checking current source terms. |
+| Real speech downloads and P1–P5 manifests | not done | No `data/` manifests are present. Download only licensed/authorized sources, create `data/manifests/source_records.csv`, then run `make build-manifests`. |
+| Leakage checks on fixture manifests | done | `pytest tests/test_manifests.py tests/test_manifests_io.py -q` passed. These are synthetic fixture checks, not real-manifest checks. |
+| Leakage checks on real manifests | not done | After manifest generation, run the manifest tests against the generated P1–P5 manifests and inspect overlap reports before training. |
+| Audio preprocessing, features, models, training engine, evaluation, robustness, export, and app code | done but not run on real data | Full CPU fixture/HTTP suite passed; run the real-data commands below on the GPU machine. |
+| Real-data training metrics and checkpoints | not done | Run the requested `make train EXP=...` commands after manifests exist. |
+| Real-data evaluation, calibration, confidence intervals, and plots | not done | Run `python -m indivoice.eval ...` for P1–P5 after checkpoints and prediction CSVs exist. |
+| Real-data robustness results | not done | Produce scored degradation CSVs, then run `make robustness SCORES=... THRESHOLD=... OUT=...`. |
+| Real ONNX export and CPU benchmark | not done | Export a real checkpoint and run the 100-run benchmark; do not report absent measurements. |
+| Web application | done but not run with a real trained model | Fixture tests and model-missing safeguards passed. Export `releases/b1.onnx`, then run `make app` and manually test an authorized sample. |
+| Documentation, citations, and release metadata | done | Internal links, referenced paths, YAML/CFF parsing, and documented CLI options were checked. |
+| Clean-environment QA | done | Fresh virtualenv: 37 tests passed; Ruff passed. Only dependency deprecation warnings were emitted. |
+| Secrets, hard-coded paths, large files, and committed data audit | done | No secrets, local machine paths, files over 5 MB, audio, checkpoints, ONNX binaries, archives, or downloaded corpora were found in tracked content. |
+| v0.1.0 release | done | This Phase 10 branch is ready to merge and tag after the final commit. |
+
+### Exact GPU-machine command sequence for real results
+
+```bash
+# 0. Clean checkout and environment
+git clone https://github.com/chiranshi04/DS-PROJECT-2.git
+cd DS-PROJECT-2
+git checkout v0.1.0
+python3 -m venv .venv
+source .venv/bin/activate
+make install
+make test
+make lint
+
+# 1. Audit sources, obtain authorized data, and build manifests
+make audit-data
+# Download only sources whose current terms permit your intended research use.
+# Populate data/manifests/source_records.csv with verified metadata.
+make build-manifests
+pytest tests/test_manifests.py tests/test_manifests_io.py -q
+
+# 2. Train the requested configurations
+make train EXP=p1_b1_small
+make train EXP=p1_b0_gmm
+make train EXP=p2_b1_logo
+make train EXP=p3_b1_lolo
+make train EXP=p4_pairwise
+make train EXP=silence_trim_on_off
+make train EXP=codec_aug_on_off
+make train EXP=model_size
+
+# 3. Evaluate P1–P5 using development-only thresholds/calibration
+python -m indivoice.eval --run runs/p1_b1_small --protocol P1 --split test
+python -m indivoice.eval --run runs/p2_b1_logo --protocol P2 --split test
+python -m indivoice.eval --run runs/p3_b1_lolo --protocol P3 --split test
+python -m indivoice.eval --run runs/p4_pairwise --protocol P4 --split test
+python -m indivoice.eval --run runs/p1_b1_small --protocol P5 --split test
+python scripts/make_report_tables.py --results-dir results --output results/evaluation_tables.md
+
+# 4. Robustness, after producing a scored predictions CSV
+make robustness SCORES=results/robustness_scores.csv THRESHOLD=0.0 OUT=results/robustness
+
+# 5. Export and benchmark a real B1 checkpoint
+python -m indivoice.export --checkpoint runs/p1_b1_small/best.pt --output releases/b1.onnx --variant small
+python scripts/benchmark.py --model-dir releases --output-json results/benchmark.json --output-md results/benchmark.md --runs 100 --warmup 10
+
+# 6. Run and manually inspect the local app
+make app
+# Open http://127.0.0.1:8000 and use only an authorized test file.
+```
+
+Do not call any generated fixture measurement a real result. Preserve the resolved configs, manifest provenance, predictions, thresholds, calibration files, JSON/CSV metrics, plots, and benchmark metadata with each experiment.
